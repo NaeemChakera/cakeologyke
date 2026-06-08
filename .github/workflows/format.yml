@@ -1,0 +1,33 @@
+name: Auto-format repository
+
+on:
+  workflow_dispatch:
+
+jobs:
+  format:
+    name: Format code with Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Prettier
+        run: npm install -g prettier
+
+      - name: Run Prettier
+        run: |
+          prettier --version || true
+          prettier --write "**/*.{html,css,js,scss,md,json}"
+
+      - name: Commit formatted changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: github-actions
+          author_email: github-actions@github.com
+          message: chore: format code with Prettier
+          add: '.'
